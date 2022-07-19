@@ -101,9 +101,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [frontend-build]
       - run:
-          name: Run backend test
+          name: Analyse frontend
           command: |
             cd frontend
             npm install
@@ -117,7 +117,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Run backend test
+          name: Analyse backend
           command: |
             cd backend
             npm install
