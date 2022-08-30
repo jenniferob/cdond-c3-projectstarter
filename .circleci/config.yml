@@ -310,7 +310,7 @@ jobs:
           command: |
              apk add --update --no-cache curl nodejs npm aws-cli
       - run:
-          name: Backend smoke test.
+          name: Backend smoke test
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
