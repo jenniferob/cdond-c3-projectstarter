@@ -174,7 +174,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
+      - image: python:3.7-alpine3.16
     steps:
       # Checkout code from git
       - checkout   
@@ -182,9 +182,6 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "a4:08:b7:bc:21:70:b1:5b:bd:85:30:ef:8e:78:b5:61"
-      # attach workspace
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -192,6 +189,9 @@ jobs:
             apk add --update tar gzip
             apk add --update openssh-client git
             apk add --no-cache python3 py3-pip && pip3 install --upgrade pip && pip3 install --no-cache-dir awscli && rm -rf /var/cache/apk/*
+            # attach workspace
+      - attach_workspace:
+          at: ~/
       - run:
           name: Configure server
           command: |
@@ -361,16 +361,16 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend]
       - deploy-infrastructure
           # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:
