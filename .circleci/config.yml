@@ -198,26 +198,10 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Configure server
+          name: Configure Server
           command: |
-            # add environment variables to server
-            echo ENVIRONMENT=production >> backend/.env
-            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> backend/.env
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
-            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/.env
-            echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env
-            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> backend/.env
-            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> backend/.env
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
-            echo TYPEORM_PORT=$TYPEORM_PORT >> backend/.env
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
-            cat backend/.env
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-      - persist_to_workspace:
-          root: ~/
-          paths: 
-            - project/backend
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0.7} 
 
@@ -351,11 +335,12 @@ jobs:
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
+            sleep 40
             if curl -s "${API_URL}/api/status" | grep "ok"
             then
-                return 0
+                exit 0
             else
-                return 1
+                exit 1
             fi
       - run:
           name: Frontend smoke test.
@@ -364,9 +349,9 @@ jobs:
             echo ${URL} 
             if curl ${URL} | grep "Welcome"
             then
-              return 0
+              exit 0
             else
-              return 1
+              exit 1
             fi
       # - destroy-environment:
       #     workflow_id: ${CIRCLE_WORKFLOW_ID:0.7} 
