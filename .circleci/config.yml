@@ -340,8 +340,6 @@ jobs:
             --filters Name=tag:aws:cloudformation:stack-name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
-            echo ${BACKEND_IP}
-            echo backend-${CIRCLE_WORKFLOW_ID:0:7}
             echo "${API_URL}"
             if curl -s "${API_URL}/api/status" | grep "ok"
             then
@@ -360,8 +358,8 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0.7} 
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0.7} 
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0.7}  
 
