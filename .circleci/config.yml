@@ -432,7 +432,8 @@ jobs:
                 aws cloudformation delete-stack --stack-name "${stack_name}"
               done
             fi
-
+            echo ""
+            echo "-------------Delete Completed-------------"
 workflows:
   default:
     jobs:
